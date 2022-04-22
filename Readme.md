@@ -2,9 +2,9 @@
  * @Author: LetMeFly
  * @Date: 2022-04-22 15:32:42
  * @LastEditors: LetMeFly
- * @LastEditTime: 2022-04-22 15:47:02
+ * @LastEditTime: 2022-04-22 16:38:59
 -->
-# EEG-Feature
+# MatFeature
 
 输入EEG的一些数据(矩阵)，计算出其中的一些特征。
 
