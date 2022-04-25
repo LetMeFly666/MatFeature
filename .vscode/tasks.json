@@ -10,7 +10,9 @@
                 "-o",
                 "${fileDirname}\\${fileBasenameNoExtension}.exe",
                 "-I",
-                "."
+                ".",
+                "-I",
+                "MatFeature"
             ],
             "options": {
                 "cwd": "${fileDirname}"

@@ -1,0 +1,35 @@
+/*
+ * @Author: LetMeFly
+ * @Date: 2022-04-22 21:09:47
+ * @LastEditors: LetMeFly
+ * @LastEditTime: 2022-04-25 21:44:56
+ */
+#ifndef READER_H
+#define READER_H
+
+#include <fstream>
+#include <Eigen/Dense>
+using Eigen::MatrixXd;
+
+/**读入文件的数据
+ * 
+ * Parameters: 
+ *   filePath - 文件路径
+ *      其中对应文件的格式为：
+ *         +--------------------------------+
+ *         |  -2.3063596e+00  -1.6005953e-01|
+ *         |  -1.6762010e+00  -2.6815952e+00|
+ *         |   7.4658109e+00   1.9460515e-01|
+ *         |                                |
+ *         +--------------------------------+
+ * 
+ * Returns:
+ *   mat - Eigen::MatrixXd 类型的矩阵
+*/
+MatrixXd Read(const char* filePath) {
+    MatrixXd mat;
+    
+    return mat;
+}
+
+#endif  // ifndef READER_H

@@ -75,7 +75,8 @@
         "windows.h": "c",
         "dense": "cpp",
         "cholesky": "cpp",
-        "core": "cpp"
+        "core": "cpp",
+        "reader": "cpp"
     },
     "editor.mouseWheelZoom": true,
     "codestats.username": "LetMeFly",
