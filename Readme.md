@@ -2,11 +2,11 @@
  * @Author: LetMeFly
  * @Date: 2022-04-22 15:32:42
  * @LastEditors: LetMeFly
- * @LastEditTime: 2022-04-22 21:01:10
+ * @LastEditTime: 2022-04-25 21:30:23
 -->
 # MatFeature
 
-输入EEG的一些数据(矩阵)，计算出其中的一些特征。
+输入(EEG等的)一些数据(矩阵)，计算出其中的一些特征。
 
 此项目地址：[github.com/LetMeFly666/MatFeature](https://github.com/LetMeFly666/MatFeature) <small>旧地址<a href="github.com/LetMeFly666/EEG-Feature">https://github.com/LetMeFly666/EEG-Feature</a></small>
 
