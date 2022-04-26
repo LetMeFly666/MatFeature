@@ -2,7 +2,7 @@
  * @Author: LetMeFly
  * @Date: 2022-04-26 11:58:33
  * @LastEditors: LetMeFly
- * @LastEditTime: 2022-04-26 14:04:14
+ * @LastEditTime: 2022-04-26 14:25:11
  */
 #ifndef MATFEATURE_H
 #define MATFEATURE_H
@@ -13,7 +13,7 @@ using Eigen::MatrixXd;
 
 #define RETURN_IF_CALCULATED \
     static bool first = true;\
-    static double ans;\
+    static vector<double> ans;\
     if (first)\
         first = false;\
     else\
@@ -25,80 +25,125 @@ private:
     MatrixXd mat;
 public:
     MatFeature(MatrixXd mat) : mat(mat) {};
-    double maximum();  // 最大值
-    double minimum();  // 最小值
-    double mean();  // 平均值
-    double peak();  // 峰-峰值
-    double ma();  // 平均幅值
-    double var();  // 方差
-    double std();  // 标准差
-    double kurtosis();  // 峭度
+    vector<double> maximum();  // 最大值
+    vector<double> minimum();  // 最小值
+    vector<double> mean();  // 平均值
+    vector<double> peak();  // 峰-峰值
+    vector<double> ma();  // 平均幅值
+    vector<double> var();  // 方差
+    vector<double> std();  // 标准差
+    vector<double> kurtosis();  // 峭度
 };
 
-double MatFeature::maximum() {
-    return mat.maxCoeff();
-}
-
-double MatFeature::minimum() {
-    return mat.minCoeff();
-}
-
-
-double MatFeature::mean() {
-    // double s = 0;
-    // for (int i = 0; i < mat.rows(); i++) {
-    //     for (int j = 0; j < mat.cols(); j++) {
-    //         s += mat(i, j);
-    //     }
-    // }
-    // return s / (mat.cols() * mat.rows());
-    
+vector<double> MatFeature::maximum() {
     RETURN_IF_CALCULATED
-    return ans = mat.sum() / (mat.cols() * mat.rows());
-}
-
-double MatFeature::peak() {
-    RETURN_IF_CALCULATED
-    return ans = maximum() - minimum();
-}
-
-double MatFeature::ma() {
-    RETURN_IF_CALCULATED
-    double s = 0;
-    for (int i = 0; i < mat.rows(); i++) {
-        for (int j = 0; j < mat.cols(); j++) {
-            s += abs(mat(i, j));
+    for (int j = 0; j < mat.cols(); j++) {
+        double M = 0;  // 若空返回0
+        if (mat.rows()) {
+            M = mat(0, j);
+            for (int i = 1; i < mat.rows(); i++) {
+                M = max(M, mat(i, j));
+            }
         }
+        ans.push_back(M);
     }
-    return ans = s / (mat.cols() * mat.rows());
+    return ans;
 }
 
-double MatFeature::var() {
+vector<double> MatFeature::minimum() {
     RETURN_IF_CALCULATED
-    double miu = mean();
-    double s = 0;
-    for (int i = 0; i < mat.rows(); i++) {
-        for (int j = 0; j < mat.cols(); j++) {
-            s += pow(mat(i, j) - miu, 2);
+    for (int j = 0; j < mat.cols(); j++) {
+        double M = 0;  // 若空返回0
+        if (mat.rows()) {
+            M = mat(0, j);
+            for (int i = 1; i < mat.rows(); i++) {
+                M = min(M, mat(i, j));
+            }
         }
+        ans.push_back(M);
     }
-    return ans = s / (mat.cols() * mat.rows());
+    return ans;
 }
 
-double MatFeature::std() {
-    RETURN_IF_CALCULATED
-    return ans = sqrt(var());
-}
 
-double MatFeature::kurtosis() {
+vector<double> MatFeature::mean() {
     RETURN_IF_CALCULATED
-    double s = 0;
-    for (int i = 0; i < mat.rows(); i++) {
-        for (int j = 0; j < mat.cols(); j++) {
-            s += pow(mat(i, j), 4);
+    for (int j = 0; j < mat.cols(); j++) {
+        double s = 0;  // 若空返回0
+        if (mat.rows()) {
+            for (int i = 0; i < mat.rows(); i++) {
+                s += mat(i, j);
+            }
+            s /= mat.rows();
         }
+        ans.push_back(s);
     }
-    return ans = s / (mat.cols() * mat.rows());
+    return ans;
+}
+
+vector<double> MatFeature::peak() {
+    RETURN_IF_CALCULATED
+    vector<double> Maximum = maximum();
+    vector<double> Minimum = minimum();
+    for (int j = 0; j < mat.cols(); j++) {
+        ans.push_back(Maximum[j] - Minimum[j]);
+    }
+    return ans;
+}
+
+vector<double> MatFeature::ma() {
+    RETURN_IF_CALCULATED
+    for (int j = 0; j < mat.cols(); j++) {
+        double s = 0;  // 若空返回0
+        if (mat.rows()) {
+            for (int i = 0; i < mat.rows(); i++) {
+                s += abs(mat(i, j));
+            }
+            s /= mat.rows();
+        }
+        ans.push_back(s);
+    }
+    return ans;
+}
+
+vector<double> MatFeature::var() {
+    RETURN_IF_CALCULATED
+    vector<double> miu = mean();
+    for (int j = 0; j < mat.cols(); j++) {
+        double s = 0;  // 若空返回0
+        if (mat.rows()) {
+            for (int i = 0; i < mat.rows(); i++) {
+                s += pow(mat(i, j) - miu[j], 2);
+            }
+            s /= mat.rows();
+        }
+        ans.push_back(s);
+    }
+    return ans;
+}
+
+vector<double> MatFeature::std() {
+    RETURN_IF_CALCULATED
+    ans = var();
+    for (auto& t : ans) {
+        t = sqrt(t);
+    }
+    return ans;
+}
+
+vector<double> MatFeature::kurtosis() {
+    RETURN_IF_CALCULATED
+    for (int j = 0; j < mat.cols(); j++) {
+        double s = 0;  // 若空返回0
+        if (mat.rows()) {
+            for (int i = 0; i < mat.rows(); i++) {
+                s += pow(mat(i, j), 4);
+            }
+            s /= mat.rows();
+        }
+        ans.push_back(s);
+    }
+    return ans;
 }
 
 #endif

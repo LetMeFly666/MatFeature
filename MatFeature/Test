@@ -2,7 +2,7 @@
  * @Author: LetMeFly
  * @Date: 2022-04-26 11:42:49
  * @LastEditors: LetMeFly
- * @LastEditTime: 2022-04-26 11:48:39
+ * @LastEditTime: 2022-04-26 14:34:40
  */
 #ifndef TEST_H
 #define TEST_H
@@ -15,9 +15,16 @@ using namespace std;
 
 template<class T>
 void debug(vector<T> v) {
+    putchar('[');
+    bool first = true;
     for (T t : v) {
-        cout << t << ' ';
+        if (first)
+            first = false;
+        else
+            cout << ", ";
+        cout << t;
     }
+    putchar(']');
     cout << endl;
 }
 
