@@ -1,0 +1,31 @@
+/*
+ * @Author: LetMeFly
+ * @Date: 2022-04-26 11:42:49
+ * @LastEditors: LetMeFly
+ * @LastEditTime: 2022-04-26 11:48:39
+ */
+#ifndef TEST_H
+#define TEST_H
+
+#include <iostream>
+#include <vector>
+using namespace std;
+
+#define dbg(x) cout << #x << " : " << x << endl
+
+template<class T>
+void debug(vector<T> v) {
+    for (T t : v) {
+        cout << t << ' ';
+    }
+    cout << endl;
+}
+
+template<class T>
+void debug(vector<vector<T>> v) {
+    for (vector<T> t : v) {
+        debug(t);
+    }
+}
+
+#endif

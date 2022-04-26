@@ -2,14 +2,18 @@
  * @Author: LetMeFly
  * @Date: 2022-04-22 21:09:47
  * @LastEditors: LetMeFly
- * @LastEditTime: 2022-04-25 21:44:56
+ * @LastEditTime: 2022-04-26 11:57:18
  */
 #ifndef READER_H
 #define READER_H
 
-#include <fstream>
+#include <MatFeature/Test>
 #include <Eigen/Dense>
+#include <fstream>
+#include <cstring>
+#include <vector>
 using Eigen::MatrixXd;
+using namespace std;
 
 /**读入文件的数据
  * 
@@ -22,13 +26,56 @@ using Eigen::MatrixXd;
  *         |   7.4658109e+00   1.9460515e-01|
  *         |                                |
  *         +--------------------------------+
+ *         n个换行 n个空格
  * 
  * Returns:
  *   mat - Eigen::MatrixXd 类型的矩阵
 */
 MatrixXd Read(const char* filePath) {
-    MatrixXd mat;
-    
+    // FILE* fp = fopen(filePath, "r");
+    // if (!fp) {
+    //     exit(-1);  // TODO: 自定义错误类
+    // }
+    // vector<vector<double>> data;
+    // vector<double> lastVector;
+    // char c;
+    // int k = 1;
+    // int step = 0;  // 0: 读数前
+    // while (~(c = fgetc(fp))) {
+    //     if (c == '\n' && lastVector.size()) {
+    //         data.push_back(lastVector);
+    //         lastVector.clear();
+    //     }
+
+    // }
+    // fclose(fp);
+    ifstream istr(filePath, ios::in);
+    vector<vector<double>> data;
+    if (istr.fail()) {
+        exit(-1);  // TODO: 自定义错误类
+    }
+    string line;
+    while (getline(istr, line)) {
+        if (line.empty()) {  // 空行
+            continue;
+        }
+        vector<double> thisLine;
+        double num;
+        stringstream ss;
+        ss << line;
+        while (ss >> num) {
+            thisLine.push_back(num);
+        }
+        data.push_back(thisLine);
+    }
+    // debug(data);
+    assert(data.size() > 0);
+    MatrixXd mat(data.size(), data[0].size());
+    for (int line = 0; line < data.size(); line++) {
+        for (int th = 0; th < data[line].size(); th++) {
+            mat(line, th) = data[line][th];
+        }
+    }
     return mat;
 }
 
