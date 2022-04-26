@@ -32,23 +32,6 @@ using namespace std;
  *   mat - Eigen::MatrixXd 类型的矩阵
 */
 MatrixXd Read(const char* filePath) {
-    // FILE* fp = fopen(filePath, "r");
-    // if (!fp) {
-    //     exit(-1);  // TODO: 自定义错误类
-    // }
-    // vector<vector<double>> data;
-    // vector<double> lastVector;
-    // char c;
-    // int k = 1;
-    // int step = 0;  // 0: 读数前
-    // while (~(c = fgetc(fp))) {
-    //     if (c == '\n' && lastVector.size()) {
-    //         data.push_back(lastVector);
-    //         lastVector.clear();
-    //     }
-
-    // }
-    // fclose(fp);
     ifstream istr(filePath, ios::in);
     vector<vector<double>> data;
     if (istr.fail()) {

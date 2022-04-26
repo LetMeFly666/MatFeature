@@ -78,6 +78,7 @@
         "core": "cpp",
         "Reader": "cpp",
         "Test": "cpp",
+        "MatFeature": "cpp",
     },
     "editor.mouseWheelZoom": true,
     "codestats.username": "LetMeFly",

@@ -1,0 +1,26 @@
+/*
+ * @Author: LetMeFly
+ * @Date: 2022-04-26 11:58:33
+ * @LastEditors: LetMeFly
+ * @LastEditTime: 2022-04-26 12:00:55
+ */
+#ifndef MATFEATURE_H
+#define MATFEATURE_H
+
+#include <Eigen/Dense>
+using Eigen::MatrixXd;
+
+
+class MatFeature {
+private:
+    MatrixXd mat;
+public:
+    MatFeature(MatrixXd mat) : mat(mat) {};
+    double max();
+};
+
+MatFeature::max() {
+    
+}
+
+#endif
