@@ -2,7 +2,7 @@
  * @Author: LetMeFly
  * @Date: 2022-04-26 11:58:33
  * @LastEditors: LetMeFly
- * @LastEditTime: 2022-04-26 15:48:57
+ * @LastEditTime: 2022-04-26 16:57:40
  */
 #ifndef MATFEATURE_H
 #define MATFEATURE_H
@@ -32,7 +32,7 @@ public:
     vector<double> ma();  // 平均幅值
     vector<double> var();  // 方差
     vector<double> std();  // 标准差
-    vector<double> kurtosis();  // 峭度
+    vector<double> kurtosis();  // 峭度  // FIXME: 这个和老师的结果不一样
 };
 
 vector<double> MatFeature::maximum() {
@@ -132,7 +132,6 @@ vector<double> MatFeature::std() {
 }
 
 vector<double> MatFeature::kurtosis() {
-    // FIXME: 这个和老师的结果不一样
     RETURN_IF_CALCULATED
     for (int j = 0; j < mat.cols(); j++) {
         double s = 0;  // 若空返回0
