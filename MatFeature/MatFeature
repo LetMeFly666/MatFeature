@@ -2,7 +2,7 @@
  * @Author: LetMeFly
  * @Date: 2022-04-26 11:58:33
  * @LastEditors: LetMeFly
- * @LastEditTime: 2022-04-26 14:25:11
+ * @LastEditTime: 2022-04-26 15:48:57
  */
 #ifndef MATFEATURE_H
 #define MATFEATURE_H
@@ -132,6 +132,7 @@ vector<double> MatFeature::std() {
 }
 
 vector<double> MatFeature::kurtosis() {
+    // FIXME: 这个和老师的结果不一样
     RETURN_IF_CALCULATED
     for (int j = 0; j < mat.cols(); j++) {
         double s = 0;  // 若空返回0
