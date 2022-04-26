@@ -2,13 +2,22 @@
  * @Author: LetMeFly
  * @Date: 2022-04-26 11:58:33
  * @LastEditors: LetMeFly
- * @LastEditTime: 2022-04-26 12:00:55
+ * @LastEditTime: 2022-04-26 14:04:14
  */
 #ifndef MATFEATURE_H
 #define MATFEATURE_H
 
+#include <MatFeature/Test>
 #include <Eigen/Dense>
 using Eigen::MatrixXd;
+
+#define RETURN_IF_CALCULATED \
+    static bool first = true;\
+    static double ans;\
+    if (first)\
+        first = false;\
+    else\
+        return ans;
 
 
 class MatFeature {
@@ -16,11 +25,80 @@ private:
     MatrixXd mat;
 public:
     MatFeature(MatrixXd mat) : mat(mat) {};
-    double max();
+    double maximum();  // 最大值
+    double minimum();  // 最小值
+    double mean();  // 平均值
+    double peak();  // 峰-峰值
+    double ma();  // 平均幅值
+    double var();  // 方差
+    double std();  // 标准差
+    double kurtosis();  // 峭度
 };
 
-MatFeature::max() {
+double MatFeature::maximum() {
+    return mat.maxCoeff();
+}
+
+double MatFeature::minimum() {
+    return mat.minCoeff();
+}
+
+
+double MatFeature::mean() {
+    // double s = 0;
+    // for (int i = 0; i < mat.rows(); i++) {
+    //     for (int j = 0; j < mat.cols(); j++) {
+    //         s += mat(i, j);
+    //     }
+    // }
+    // return s / (mat.cols() * mat.rows());
     
+    RETURN_IF_CALCULATED
+    return ans = mat.sum() / (mat.cols() * mat.rows());
+}
+
+double MatFeature::peak() {
+    RETURN_IF_CALCULATED
+    return ans = maximum() - minimum();
+}
+
+double MatFeature::ma() {
+    RETURN_IF_CALCULATED
+    double s = 0;
+    for (int i = 0; i < mat.rows(); i++) {
+        for (int j = 0; j < mat.cols(); j++) {
+            s += abs(mat(i, j));
+        }
+    }
+    return ans = s / (mat.cols() * mat.rows());
+}
+
+double MatFeature::var() {
+    RETURN_IF_CALCULATED
+    double miu = mean();
+    double s = 0;
+    for (int i = 0; i < mat.rows(); i++) {
+        for (int j = 0; j < mat.cols(); j++) {
+            s += pow(mat(i, j) - miu, 2);
+        }
+    }
+    return ans = s / (mat.cols() * mat.rows());
+}
+
+double MatFeature::std() {
+    RETURN_IF_CALCULATED
+    return ans = sqrt(var());
+}
+
+double MatFeature::kurtosis() {
+    RETURN_IF_CALCULATED
+    double s = 0;
+    for (int i = 0; i < mat.rows(); i++) {
+        for (int j = 0; j < mat.cols(); j++) {
+            s += pow(mat(i, j), 4);
+        }
+    }
+    return ans = s / (mat.cols() * mat.rows());
 }
 
 #endif
