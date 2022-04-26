@@ -2,7 +2,7 @@
  * @Author: LetMeFly
  * @Date: 2022-04-22 21:07:21
  * @LastEditors: LetMeFly
- * @LastEditTime: 2022-04-26 14:39:08
+ * @LastEditTime: 2022-04-26 17:01:11
  */
 #include <MatFeature/MatFeature>
 #include <MatFeature/Reader>
@@ -31,6 +31,7 @@ int main() {
     show1feature("Var", matFeature.var());
     show1feature("Std", matFeature.std());
     show1feature("Kurtosis", matFeature.kurtosis());
+    show1feature("Skewness", matFeature.skewness());
 
     return 0;
 }
