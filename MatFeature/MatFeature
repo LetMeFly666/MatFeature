@@ -2,7 +2,7 @@
  * @Author: LetMeFly
  * @Date: 2022-04-26 11:58:33
  * @LastEditors: LetMeFly
- * @LastEditTime: 2022-04-26 17:08:14
+ * @LastEditTime: 2022-04-27 14:50:11
  */
 #ifndef MATFEATURE_H
 #define MATFEATURE_H
@@ -33,7 +33,7 @@ public:
     vector<double> var();  // 方差
     vector<double> std();  // 标准差
     vector<double> kurtosis();  // 峭度  // FIXME: 这个和老师的结果不一样
-    vector<double> skewness();  // 偏度
+    vector<double> skewness();  // 偏度  // FIXME: 这个和老师的结果也不一样
 };
 
 vector<double> MatFeature::maximum() {
