@@ -2,7 +2,7 @@
  * @Author: LetMeFly
  * @Date: 2022-04-26 11:58:33
  * @LastEditors: LetMeFly
- * @LastEditTime: 2022-04-27 14:50:11
+ * @LastEditTime: 2022-05-08 13:55:52
  */
 #ifndef MATFEATURE_H
 #define MATFEATURE_H
@@ -32,8 +32,23 @@ public:
     vector<double> ma();  // 平均幅值
     vector<double> var();  // 方差
     vector<double> std();  // 标准差
-    vector<double> kurtosis();  // 峭度  // FIXME: 这个和老师的结果不一样
-    vector<double> skewness();  // 偏度  // FIXME: 这个和老师的结果也不一样
+    vector<double> kurtosis();  // 峭度
+    vector<double> skewness();  // 偏度  // FIXME: 这个和老师的结果不一样
+    vector<double> rms();  // 均方根
+    vector<double> sra();  // 方根幅值
+    vector<double> energy();  // 能量  // FIXME: 这个和老师的结果也不一样
+    vector<double> shapeFactor();  // 波形因子
+    vector<double> crestFactor();  // 峰值因子
+    vector<double> impulseFactor();  // 脉冲因子
+    vector<double> clearanceFactor();  // 裕度因子
+    vector<double> cs();  // 偏斜度因子  // TODO: PDF文件未提供测试用例，暂未验证
+    vector<double> ckf();  // 峭度因子  // TODO: PDF文件未提供测试用例，暂未验证
+    vector<double> fc();  // 重心频率  // TODO: 未掌握FFT，因此FC待实现
+    vector<double> msf();  // 均方频率  // TODO: 需用到fc中计算出的p和f，因此MSF待实现
+    vector<double> rmsf();  // 均方根频率  // TODO: 未验证
+    vector<double> vf();  // 频率方差  // TODO: 需用到fc中计算出的p和f，因此vf待实现
+    vector<double> rvf();  // 频率标准差  // TODO: 未验证
+    // Next: 1.24
 };
 
 vector<double> MatFeature::maximum() {
@@ -65,7 +80,6 @@ vector<double> MatFeature::minimum() {
     }
     return ans;
 }
-
 
 vector<double> MatFeature::mean() {
     RETURN_IF_CALCULATED
@@ -138,10 +152,14 @@ vector<double> MatFeature::kurtosis() {
     for (int j = 0; j < mat.cols(); j++) {
         double s = 0;  // 若空返回0
         if (mat.rows()) {
+            double s1 = 0, s2 = 0;
             for (int i = 0; i < mat.rows(); i++) {
-                s += pow(mat(i, j) - Mean[j], 4);
+                s1 += pow(mat(i, j) - Mean[j], 4);
+                s2 += pow(mat(i, j) - Mean[j], 2);
             }
-            s /= mat.rows();
+            s1 /= mat.rows();
+            s2 = pow(s2 / mat.rows(), 2);
+            s = s1 / s2;
         }
         ans.push_back(s);
     }
@@ -164,4 +182,195 @@ vector<double> MatFeature::skewness() {
     return ans;
 }
 
+vector<double> MatFeature::rms() {
+    RETURN_IF_CALCULATED
+    for (int j = 0; j < mat.cols(); j++) {
+        double s = 0;  // 若空返回0
+        if (mat.rows()) {
+            for (int i = 0; i < mat.rows(); i++) {
+                s += mat(i, j) * mat(i, j);
+            }
+            s = sqrt(s / mat.rows());
+        }
+        ans.push_back(s);
+    }
+    return ans;
+}
+
+vector<double> MatFeature::sra() {
+    RETURN_IF_CALCULATED
+    for (int j = 0; j < mat.cols(); j++) {
+        double s = 0;  // 若空返回0
+        if (mat.rows()) {
+            for (int i = 0; i < mat.rows(); i++) {
+                s += sqrt(abs(mat(i, j)));
+            }
+            s = pow(s / mat.rows(), 2);
+        }
+        ans.push_back(s);
+    }
+    return ans;
+}
+
+vector<double> MatFeature::energy() {
+    RETURN_IF_CALCULATED
+    for (int j = 0; j < mat.cols(); j++) {
+        double s = 0;  // 若空返回0
+        if (mat.rows()) {
+            for (int i = 0; i < mat.rows(); i++) {
+                s += pow(mat(i, j), 2);
+            }
+        }
+        ans.push_back(s);
+    }
+    return ans;
+}
+
+vector<double> MatFeature::shapeFactor() {
+    RETURN_IF_CALCULATED
+    vector<double> Rms = rms();
+    vector<double> Ma = ma();
+    for (int j = 0; j < mat.cols(); j++) {
+        double s = Rms[j] / Ma[j];
+        ans.push_back(s);
+    }
+    return ans;
+}
+
+vector<double> MatFeature::crestFactor() {
+    RETURN_IF_CALCULATED
+    vector<double> Max = maximum();
+    vector<double> Min = minimum();
+    vector<double> Rms = rms();
+    for (int j = 0; j < mat.cols(); j++) {
+        double s = (Max[j] - Min[j]) / Rms[j];
+        ans.push_back(s);
+    }
+    return ans;
+}
+
+vector<double> MatFeature::impulseFactor() {
+    RETURN_IF_CALCULATED
+    for (int j = 0; j < mat.cols(); j++) {
+        double s = 0;  // 若空返回0
+        if (mat.rows()) {
+            double maxAbsS = 0, sma = 0;
+            for (int i = 0; i < mat.rows(); i++) {
+                maxAbsS = max(maxAbsS, abs(mat(i, j)));
+                sma += abs(mat(i, j));
+            }
+            sma /= mat.rows();
+            s = maxAbsS / sma;
+        }
+        ans.push_back(s);
+    }
+    return ans;
+}
+
+vector<double> MatFeature::clearanceFactor() {
+    RETURN_IF_CALCULATED
+    for (int j = 0; j < mat.cols(); j++) {
+        double s = 0;  // 若空返回0
+        if (mat.rows()) {
+            double maxAbsS = 0, sr = 0;
+            for (int i = 0; i < mat.rows(); i++) {
+                maxAbsS = max(maxAbsS, abs(mat(i, j)));
+                sr += sqrt(abs(mat(i, j)));
+            }
+            sr = pow(sr / mat.rows(), 2);
+            s = maxAbsS / sr;
+        }
+        ans.push_back(s);
+    }
+    return ans;
+}
+
+vector<double> MatFeature::cs() {
+    RETURN_IF_CALCULATED
+    vector<double> Std = std();
+    vector<double> Rms = rms();
+    vector<double> Mean = mean();
+    for (int j = 0; j < mat.cols(); j++) {
+        double s = 0;  // 若空返回0
+        if (mat.rows()) {
+            double ssf = 0;
+            for (int i = 0; i < mat.rows(); i++) {
+                ssf += pow(abs(mat(i, j)) - Mean[j], 3);
+            }
+            ssf = ssf / mat.rows() / pow(Rms[j], 3);
+            s = ssf / pow(Std[j], 3);
+        }
+        ans.push_back(s);
+    }
+    return ans;
+}
+
+vector<double> MatFeature::ckf() {
+    RETURN_IF_CALCULATED
+    for (int j = 0; j < mat.cols(); j++) {
+        double s = 0;  // 若空返回0
+        if (mat.rows()) {
+            double ck = 0, xrms = 0;
+            for (int i = 0; i < mat.rows(); i++) {
+                ck += pow(mat(i, j), 4);
+                xrms += pow(mat(i, j), 2);
+            }
+            ck /= mat.rows();
+            xrms = sqrt(xrms / mat.rows());
+            s = ck / pow(xrms, 4);
+        }
+        ans.push_back(s);
+    }
+    return ans;
+}
+
+vector<double> MatFeature::fc() {
+    RETURN_IF_CALCULATED
+    for (int j = 0; j < mat.cols(); j++) {
+        double s = 0;  // 若空返回0
+        // TODO: 未实现
+        ans.push_back(s);
+    }
+    return ans;
+}
+
+vector<double> MatFeature::msf() {
+    RETURN_IF_CALCULATED
+    for (int j = 0; j < mat.cols(); j++) {
+        double s = 0;  // 若空返回0
+        // TODO: 未实现
+        ans.push_back(s);
+    }
+    return ans;
+}
+
+vector<double> MatFeature::rmsf() {
+    RETURN_IF_CALCULATED
+    vector<double> Msf = msf();
+    for (int j = 0; j < mat.cols(); j++) {
+        double s = sqrt(Msf[j]);
+        ans.push_back(s);
+    }
+    return ans;
+}
+
+vector<double> MatFeature::vf() {
+    RETURN_IF_CALCULATED
+    for (int j = 0; j < mat.cols(); j++) {
+        double s = 0;  // 若空返回0
+        // TODO: 未实现
+        ans.push_back(s);
+    }
+    return ans;
+}
+
+vector<double> MatFeature::rvf() {
+    RETURN_IF_CALCULATED
+    vector<double> Vf = vf();
+    for (int j = 0; j < mat.cols(); j++) {
+        double s = sqrt(Vf[j]);
+        ans.push_back(s);
+    }
+    return ans;
+}
 #endif

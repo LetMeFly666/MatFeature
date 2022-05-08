@@ -2,8 +2,9 @@
  * @Author: LetMeFly
  * @Date: 2022-04-22 21:07:21
  * @LastEditors: LetMeFly
- * @LastEditTime: 2022-04-26 17:01:11
+ * @LastEditTime: 2022-05-08 13:55:30
  */
+// g++.exe main.cpp -o main.exe -I . -I MatFeature
 #include <MatFeature/MatFeature>
 #include <MatFeature/Reader>
 #include <MatFeature/Test>
@@ -32,6 +33,20 @@ int main() {
     show1feature("Std", matFeature.std());
     show1feature("Kurtosis", matFeature.kurtosis());
     show1feature("Skewness", matFeature.skewness());
+    show1feature("Rms", matFeature.rms());
+    show1feature("Sra", matFeature.sra());
+    show1feature("Energy", matFeature.energy());
+    show1feature("ShapeFactor", matFeature.shapeFactor());
+    show1feature("CrestFactor", matFeature.crestFactor());
+    show1feature("ImpulseFactor", matFeature.impulseFactor());
+    show1feature("ClearanceFactor", matFeature.clearanceFactor());
+    show1feature("Cs", matFeature.cs());
+    show1feature("Ckf", matFeature.ckf());
+    show1feature("Fc", matFeature.fc());
+    show1feature("Msf", matFeature.msf());
+    show1feature("Rmsf", matFeature.rmsf());
+    show1feature("Vf", matFeature.vf());
+    show1feature("Rvf", matFeature.rvf());
 
     return 0;
 }
